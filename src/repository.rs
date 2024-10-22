@@ -31,7 +31,7 @@ impl UserRepository {
 
         let items: Vec<User> = users::table
             .limit(pagination.size)
-            .offset(((pagination.page - 1) * pagination.size))
+            .offset((pagination.page - 1) * pagination.size)
             .load::<User>(&conn)?;
 
         let total_pages = (total_count as f64 / pagination.size as f64).ceil() as i64;

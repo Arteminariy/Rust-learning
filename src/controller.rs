@@ -1,10 +1,10 @@
 use rocket::{get, post, put, delete, routes, Route, State};
 use rocket::serde::json::Json;
-use crate::error::{CustomError, ErrorResponse};
+use crate::error::{ErrorResponse};
 use crate::hoc::handle_result;
 use crate::service::UserService;
 use crate::models::{NewUser, UpdateUser, User};
-use crate::pagination::{List, RequestPagination, ResponsePagination};
+use crate::pagination::{List, ResponsePagination};
 
 #[post("/users", format = "json", data = "<user_dto>")]
 pub fn create_user(user_service: &State<UserService>, user_dto: Json<NewUser>) -> Result<Json<User>, ErrorResponse> {
