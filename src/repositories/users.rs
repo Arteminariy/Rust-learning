@@ -1,9 +1,8 @@
 use diesel::prelude::*;
-use crate::models::{NewUser, UpdateUser, User};
 use crate::schema::users;
 use diesel::r2d2::{ConnectionManager, Pool};
+use crate::models::users::{NewUser, UpdateUser, User};
 use crate::pagination::{List, RequestPagination, ResponsePagination};
-use crate::schema::users::id;
 
 pub struct UserRepository {
     pub pool: Pool<ConnectionManager<PgConnection>>,
@@ -47,12 +46,12 @@ impl UserRepository {
 
     pub fn update_user(&self, user_id: i32, user_dto: UpdateUser) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
-        diesel::update(users::table.filter(id.eq(user_id))).set(&user_dto).get_result(&conn)
+        diesel::update(users::table.filter(users::id.eq(user_id))).set(&user_dto).get_result(&conn)
     }
 
     pub fn delete_user(&self, user_id: i32) -> Result<(), diesel::result::Error> {
         let conn = self.pool.get().unwrap();
-        let rows_deleted = diesel::delete(users::table.filter(id.eq(user_id))).execute(&conn)?;
+        let rows_deleted = diesel::delete(users::table.filter(users::id.eq(user_id))).execute(&conn)?;
         if rows_deleted == 0 {
             Err(diesel::result::Error::NotFound)
         } else {

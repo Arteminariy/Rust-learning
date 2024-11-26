@@ -1,4 +1,4 @@
-use diesel::{Queryable, Insertable};
+use diesel::{Queryable, Insertable, AsChangeset};
 use serde::{Serialize, Deserialize};
 use crate::schema::users;
 

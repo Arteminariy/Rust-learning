@@ -1,6 +1,6 @@
-use crate::repository::UserRepository;
-use crate::models::{NewUser, UpdateUser, User};
+use crate::models::users::{NewUser, UpdateUser, User};
 use crate::pagination::{List, ResponsePagination};
+use crate::repositories::users::UserRepository;
 
 pub struct UserService {
     pub repo: UserRepository,

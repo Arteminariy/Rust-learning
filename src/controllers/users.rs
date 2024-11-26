@@ -1,9 +1,9 @@
 use rocket::{get, post, put, delete, routes, Route, State};
 use rocket::serde::json::Json;
+use crate::services::users::UserService;
 use crate::error::{ErrorResponse};
-use crate::hoc::handle_result;
-use crate::service::UserService;
-use crate::models::{NewUser, UpdateUser, User};
+use crate::wrappers::handle_result::handle_result;
+use crate::models::users::{NewUser, UpdateUser, User};
 use crate::pagination::{List, ResponsePagination};
 
 #[post("/users", format = "json", data = "<user_dto>")]

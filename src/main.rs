@@ -3,22 +3,22 @@ extern crate rocket;
 #[macro_use]
 extern crate diesel;
 
-mod controller;
 mod models;
 mod schema;
-mod repository;
-mod service;
-
 mod pagination;
-
 mod error;
+mod repositories;
+mod wrappers;
+mod controllers;
+mod services;
 
-mod hoc;
+mod helpers;
 
 use rocket::{Build, Rocket};
-use repository::UserRepository;
-use rust_test_ms::establish_connection_pool;
-use service::UserService;
+use crate::controllers::users::routes;
+use crate::helpers::establish_connection_pool::establish_connection_pool;
+use crate::repositories::users::UserRepository;
+use crate::services::users::UserService;
 
 #[launch]
 fn rocket() -> Rocket<Build> {
@@ -32,5 +32,5 @@ fn rocket() -> Rocket<Build> {
 
     rocket::build()
         .manage(user_service)
-        .mount("/", controller::routes())
+        .mount("/", routes())
 }
