@@ -12,3 +12,5 @@ pub mod wrappers;
 pub mod schema;
 
 pub mod helpers;
+
+pub mod traits;

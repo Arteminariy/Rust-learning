@@ -9,6 +9,8 @@ pub struct User {
     pub name: String,
     pub age: i32,
     pub is_married: bool,
+    pub role_id: Option<i32>,
+    pub password_hash: String,
 }
 
 #[derive(Debug, Insertable, Serialize, Deserialize)]
@@ -18,6 +20,8 @@ pub struct NewUser {
     pub name: String,
     pub age: i32,
     pub is_married: bool,
+    pub role_id: Option<i32>,
+    pub password_hash: String,
 }
 
 #[derive(Debug, Insertable, Serialize, Deserialize, AsChangeset)]
@@ -27,4 +31,6 @@ pub struct UpdateUser {
     pub name: String,
     pub age: i32,
     pub is_married: bool,
+    pub role_id: Option<i32>,
+    pub password_hash: String,
 }

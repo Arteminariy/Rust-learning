@@ -21,6 +21,9 @@ impl<'r> Responder<'r, 'static> for ErrorResponse {
 #[derive(Debug)]
 pub enum CustomError {
     NotFound(String),
+    Unauthorized(String),
+    Forbidden(String),
+    UnprocessableEntity(String),
     InternalServerError(String),
 }
 
@@ -29,6 +32,18 @@ impl From<CustomError> for ErrorResponse {
         match err {
             CustomError::NotFound(message) => ErrorResponse {
                 code: 404,
+                message,
+            },
+            CustomError::Unauthorized(message) => ErrorResponse {
+                code: 401,
+                message,
+            },
+            CustomError::Forbidden(message) => ErrorResponse {
+                code: 403,
+                message,
+            },
+            CustomError::UnprocessableEntity(message) => ErrorResponse {
+                code: 422,
                 message,
             },
             CustomError::InternalServerError(message) => ErrorResponse {

@@ -38,6 +38,6 @@ pub fn delete_user(user_service: &State<UserService>, user_id: String) -> Result
     handle_result(user_service.delete_user(user_id))
 }
 
-pub fn routes() -> Vec<Route> {
+pub fn user_routes() -> Vec<Route> {
     routes![create_user, get_user, get_list, update_user, delete_user]
 }

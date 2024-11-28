@@ -26,4 +26,8 @@ impl UserService {
     pub fn delete_user(&self, user_id: i32) -> Result<(), diesel::result::Error> {
         self.repo.delete_user(user_id)
     }
+
+    pub fn get_user_by_name(&self, name: &str) -> Result<User, diesel::result::Error> {
+        self.repo.get_by_name(name)
+    }
 }

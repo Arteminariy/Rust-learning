@@ -21,6 +21,11 @@ impl UserRepository {
         users::table.find(user_id).get_result(&conn)
     }
 
+    pub fn get_by_name(&self, name: &str) -> Result<User, diesel::result::Error> {
+        let conn = self.pool.get().unwrap();
+        users::table.filter(users::name.eq(name)).first::<User>(&conn)
+    }
+
     pub fn get_list(&self, pagination: ResponsePagination) -> Result<List<User>, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
 
