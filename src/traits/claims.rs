@@ -8,6 +8,7 @@ pub struct RefreshClaim {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessClaim {
+    pub id: i32,
     pub name: String,
     pub age: i32,
     pub is_married: bool,

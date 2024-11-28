@@ -32,5 +32,4 @@ pub struct UpdateUser {
     pub age: i32,
     pub is_married: bool,
     pub role_id: Option<i32>,
-    pub password_hash: String,
 }

@@ -14,6 +14,7 @@ pub fn generate_tokens(user: &User) -> Result<TokenResponse, jsonwebtoken::error
     let access_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 300;
     let refresh_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 3600;
     let access_claim = AccessClaim {
+        id: user.id.clone(),
         name: user.name.clone(),
         age: user.age.clone(),
         is_married: user.is_married.clone(),

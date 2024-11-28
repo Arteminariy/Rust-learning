@@ -4,6 +4,7 @@ use crate::traits::login_data::LoginData;
 use crate::error::{CustomError, ErrorResponse};
 use crate::models::users::{NewUser};
 use crate::services::auth::AuthService;
+use crate::traits::refresh_data::RefreshData;
 use crate::traits::token_response::TokenResponse;
 
 fn error_matcher(e: CustomError) -> ErrorResponse {
@@ -41,6 +42,11 @@ pub fn register(auth_service: &State<AuthService>, register_data: Json<NewUser>)
     auth_service.register(register_data.into_inner()).map(Json).map_err(error_matcher)
 }
 
+#[post("/auth/refresh", format = "json", data = "<refresh_data>")]
+pub fn refresh(auth_service: &State<AuthService>, refresh_data: Json<RefreshData>) -> Result<Json<TokenResponse>, ErrorResponse> {
+    auth_service.refresh(refresh_data.into_inner()).map(Json).map_err(error_matcher)
+}
+
 pub fn auth_routes() -> Vec<Route> {
-    routes![login, register]
+    routes![login, register, refresh]
 }

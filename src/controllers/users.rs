@@ -6,11 +6,6 @@ use crate::wrappers::handle_result::handle_result;
 use crate::models::users::{NewUser, UpdateUser, User};
 use crate::pagination::{List, ResponsePagination};
 
-#[post("/users", format = "json", data = "<user_dto>")]
-pub fn create_user(user_service: &State<UserService>, user_dto: Json<NewUser>) -> Result<Json<User>, ErrorResponse> {
-    handle_result(user_service.create_user(user_dto.into_inner()))
-}
-
 #[get("/users/<user_id>")]
 pub fn get_user(user_service: &State<UserService>, user_id: String) -> Result<Json<User>, ErrorResponse> {
     let user_id = user_id.parse::<i32>().unwrap();
@@ -39,5 +34,5 @@ pub fn delete_user(user_service: &State<UserService>, user_id: String) -> Result
 }
 
 pub fn user_routes() -> Vec<Route> {
-    routes![create_user, get_user, get_list, update_user, delete_user]
+    routes![get_user, get_list, update_user, delete_user]
 }
