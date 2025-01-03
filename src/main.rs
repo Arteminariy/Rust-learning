@@ -16,17 +16,26 @@ mod helpers;
 
 mod traits;
 
+mod middlewares;
+
+use crate::middlewares::catchers::unauthorized_catcher::unauthorized_catcher;
 use rocket::{Build, Rocket};
+use crate::helpers::init_database::init_database;
 use crate::controllers::auth::auth_routes;
+use crate::controllers::roles::roles_routes;
 use crate::controllers::users::user_routes;
 use crate::helpers::establish_connection_pool::establish_connection_pool;
+use crate::repositories::roles::RolesRepository;
 use crate::repositories::users::UserRepository;
 use crate::services::auth::AuthService;
+use crate::services::roles::RolesService;
 use crate::services::users::UserService;
 
 #[launch]
 fn rocket() -> Rocket<Build> {
     let pool = establish_connection_pool();
+
+    init_database(pool.clone());
 
     let user_service = UserService {
         repo: UserRepository {
@@ -42,8 +51,16 @@ fn rocket() -> Rocket<Build> {
         }
     };
 
+    let roles_service = RolesService {
+        repo: RolesRepository {
+            pool: pool.clone(),
+        }
+    };
+
     rocket::build()
         .manage(user_service)
         .manage(auth_service)
-        .mount("/", [user_routes(), auth_routes()].concat())
+        .manage(roles_service)
+        .mount("/", [user_routes(), auth_routes(), roles_routes()].concat())
+        .register("/", catchers![unauthorized_catcher])
 }

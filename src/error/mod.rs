@@ -3,7 +3,7 @@ use rocket::request::Request;
 use rocket::response::{self, Responder, Response};
 use serde::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct ErrorResponse {
     pub code: u16,
     pub message: String,
@@ -50,6 +50,15 @@ impl From<CustomError> for ErrorResponse {
                 code: 500,
                 message,
             },
+        }
+    }
+}
+
+impl From<diesel::result::Error> for CustomError {
+    fn from(error: diesel::result::Error) -> Self {
+        match error {
+            diesel::result::Error::NotFound => CustomError::NotFound("Resource not found".into()),
+            _ => CustomError::InternalServerError(format!("Internal server error: {:?}", error)),
         }
     }
 }

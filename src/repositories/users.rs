@@ -13,12 +13,12 @@ impl UserRepository {
         let conn = self.pool.get().unwrap();
         diesel::insert_into(users::table)
             .values(&user_dto)
-            .get_result(&conn)
+            .get_result::<User>(&conn)
     }
 
     pub fn get_user(&self, user_id: i32) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
-        users::table.find(user_id).get_result(&conn)
+        users::table.find(user_id).get_result::<User>(&conn)
     }
 
     pub fn get_by_name(&self, name: &str) -> Result<User, diesel::result::Error> {
@@ -51,7 +51,7 @@ impl UserRepository {
 
     pub fn update_user(&self, user_id: i32, user_dto: UpdateUser) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
-        diesel::update(users::table.filter(users::id.eq(user_id))).set(&user_dto).get_result(&conn)
+        diesel::update(users::table.filter(users::id.eq(user_id))).set(&user_dto).get_result::<User>(&conn)
     }
 
     pub fn delete_user(&self, user_id: i32) -> Result<(), diesel::result::Error> {
@@ -62,5 +62,10 @@ impl UserRepository {
         } else {
             Ok(())
         }
+    }
+
+    pub fn change_password(&self, user_id: i32, new_password_hash: String) -> Result<User, diesel::result::Error> {
+        let conn = self.pool.get().unwrap();
+        diesel::update(users::table.filter(users::id.eq(user_id))).set(users::password_hash.eq(new_password_hash)).get_result::<User>(&conn)
     }
 }

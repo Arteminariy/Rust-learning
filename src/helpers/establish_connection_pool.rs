@@ -1,8 +1,7 @@
 use dotenvy::dotenv;
 use std::env;
-use diesel::PgConnection;
-use diesel::r2d2::ConnectionManager;
-use r2d2::Pool;
+use diesel::prelude::*;
+use diesel::r2d2::{ConnectionManager, Pool};
 
 pub fn establish_connection_pool() -> Pool<ConnectionManager<PgConnection>> {
     dotenv().ok();

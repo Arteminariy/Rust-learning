@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TokenResponse {
-    pub access_token: String,
-    pub refresh_token: String,
+pub struct ChangePasswordDto {
+    pub old_password: String,
+    pub new_password: String,
 }
