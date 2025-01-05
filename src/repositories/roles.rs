@@ -11,14 +11,14 @@ pub struct RolesRepository {
 }
 
 impl RolesRepository {
-    pub fn create_role(&self, role_dto: NewRole) -> Result<Role, diesel::result::Error> {
+    pub fn create(&self, role_dto: NewRole) -> Result<Role, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::insert_into(roles::table)
             .values(&role_dto)
             .get_result::<Role>(&conn)
     }
 
-    pub fn get_role(&self, role_id: Uuid) -> Result<Role, diesel::result::Error> {
+    pub fn get_one(&self, role_id: Uuid) -> Result<Role, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         roles::table.find(role_id).get_result::<Role>(&conn)
     }
@@ -46,12 +46,12 @@ impl RolesRepository {
         })
     }
 
-    pub fn update_role(&self, role_id: Uuid, role_dto: UpdateRole) -> Result<Role, diesel::result::Error> {
+    pub fn update(&self, role_id: Uuid, role_dto: UpdateRole) -> Result<Role, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::update(roles::table.filter(roles::id.eq(role_id))).set(&role_dto).get_result::<Role>(&conn)
     }
 
-    pub fn delete_role(&self, role_id: Uuid) -> Result<(), diesel::result::Error> {
+    pub fn delete(&self, role_id: Uuid) -> Result<(), diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         let rows_deleted = diesel::delete(roles::table.filter(roles::id.eq(role_id))).execute(&conn)?;
         if rows_deleted == 0 {

@@ -3,9 +3,8 @@ use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 use crate::schema::users;
 
-#[derive(Debug, Queryable, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct User {
+#[derive(Debug, Queryable)]
+pub struct UserModel {
     pub id: Uuid,
     pub name: String,
     pub role_id: Option<Uuid>,
@@ -15,7 +14,7 @@ pub struct User {
 #[derive(Debug, Insertable, Serialize, Deserialize)]
 #[table_name = "users"]
 #[serde(rename_all = "camelCase")]
-pub struct NewUser {
+pub struct CreateUserDto {
     pub name: String,
     pub role_id: Option<Uuid>,
     pub password_hash: String,
@@ -25,7 +24,25 @@ pub struct NewUser {
 #[table_name = "users"]
 #[serde(rename_all = "camelCase")]
 #[changeset_options(treat_none_as_null = "true")]
-pub struct UpdateUser {
+pub struct UpdateUserDto {
     pub name: String,
     pub role_id: Option<Uuid>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UserDto {
+    pub id: Uuid,
+    pub name: String,
+    pub role_id: Option<Uuid>,
+}
+
+impl From<UserModel> for UserDto {
+    fn from(value: UserModel) -> Self {
+        Self {
+            id: value.id,
+            name: value.name,
+            role_id: value.role_id,
+        }
+    }
 }

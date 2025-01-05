@@ -44,10 +44,8 @@ fn rocket() -> Rocket<Build> {
     };
 
     let auth_service = AuthService {
-        user_service: UserService {
-            repo: UserRepository {
-                pool: pool.clone(),
-            },
+        user_repository: UserRepository {
+            pool: pool.clone(),
         }
     };
 

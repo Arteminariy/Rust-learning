@@ -10,23 +10,23 @@ pub struct RolesService {
 }
 
 impl RolesService {
-    pub fn create_role(&self, role_dto: NewRole) -> ServiceResult<Role> {
-        self.repo.create_role(role_dto).map_err(CustomError::from)
+    pub fn create(&self, role_dto: NewRole) -> ServiceResult<Role> {
+        self.repo.create(role_dto).map_err(CustomError::from)
     }
 
-    pub fn get_role(&self, role_id: Uuid) -> ServiceResult<Role> {
-        self.repo.get_role(role_id).map_err(CustomError::from)
+    pub fn get_one(&self, role_id: Uuid) -> ServiceResult<Role> {
+        self.repo.get_one(role_id).map_err(CustomError::from)
     }
 
     pub fn get_list(&self, pagination: ResponsePagination) -> ServiceResult<List<Role>> {
         self.repo.get_list(pagination).map_err(CustomError::from)
     }
 
-    pub fn update_role(&self, role_id: Uuid, role_dto: UpdateRole) -> ServiceResult<Role> {
-        self.repo.update_role(role_id, role_dto).map_err(CustomError::from)
+    pub fn update(&self, role_id: Uuid, role_dto: UpdateRole) -> ServiceResult<Role> {
+        self.repo.update(role_id, role_dto).map_err(CustomError::from)
     }
 
-    pub fn delete_role(&self, role_id: Uuid) -> ServiceResult<()> {
-        self.repo.delete_role(role_id).map_err(CustomError::from)
+    pub fn delete(&self, role_id: Uuid) -> ServiceResult<()> {
+        self.repo.delete(role_id).map_err(CustomError::from)
     }
 }

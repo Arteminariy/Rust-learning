@@ -11,13 +11,13 @@ use crate::wrappers::handle_result::{handle_delete_result, handle_result, Contro
 
 #[post("/roles", format = "json", data = "<role_dto>")]
 pub fn create_role(roles_service: &State<RolesService>, role_dto: Json<NewRole>, _token: AdminAuth) -> ControllerResult<Role> {
-    handle_result(roles_service.create_role(role_dto.into_inner()))
+    handle_result(roles_service.create(role_dto.into_inner()))
 }
 
 #[get("/roles/<role_id>")]
 pub fn get_role(roles_service: &State<RolesService>, role_id: String, _token: TokenAuth) -> ControllerResult<Role> {
     match Uuid::parse_str(&role_id) {
-        Ok(role_id) => handle_result(roles_service.get_role(role_id)),
+        Ok(role_id) => handle_result(roles_service.get_one(role_id)),
         Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
     }
 }
@@ -34,7 +34,7 @@ pub fn get_list(roles_service: &State<RolesService>, size: Option<i64>, page: Op
 #[put("/roles/<role_id>", format = "json", data = "<role_dto>")]
 pub fn update_role(roles_service: &State<RolesService>, role_id: String, role_dto: Json<UpdateRole>, _token: AdminAuth) -> ControllerResult<Role> {
     match Uuid::parse_str(&role_id) {
-        Ok(role_id) => handle_result(roles_service.update_role(role_id, role_dto.into_inner())),
+        Ok(role_id) => handle_result(roles_service.update(role_id, role_dto.into_inner())),
         Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
     }
 }
@@ -42,7 +42,7 @@ pub fn update_role(roles_service: &State<RolesService>, role_id: String, role_dt
 #[delete("/roles/<role_id>")]
 pub fn delete_role(roles_service: &State<RolesService>, role_id: String, _token: AdminAuth) -> NoContentResult {
     match Uuid::parse_str(&role_id) {
-        Ok(role_id) =>  handle_delete_result(roles_service.delete_role(role_id)),
+        Ok(role_id) =>  handle_delete_result(roles_service.delete(role_id)),
         Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
     }
 }

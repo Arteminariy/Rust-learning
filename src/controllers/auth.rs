@@ -2,7 +2,7 @@ use rocket::{post, put, routes, Route, State};
 use rocket::serde::json::Json;
 use crate::traits::login_data::LoginData;
 use crate::middlewares::guards::token_auth::TokenAuth;
-use crate::models::users::{NewUser};
+use crate::models::users::{CreateUserDto};
 use crate::services::auth::AuthService;
 use crate::traits::change_password_dto::ChangePasswordDto;
 use crate::traits::refresh_data::RefreshData;
@@ -15,7 +15,7 @@ pub fn login(auth_service: &State<AuthService>, login_dto: Json<LoginData>) -> C
 }
 
 #[post("/auth/register", format = "json", data = "<register_data>")]
-pub fn register(auth_service: &State<AuthService>, register_data: Json<NewUser>) -> ControllerResult<TokenResponse> {
+pub fn register(auth_service: &State<AuthService>, register_data: Json<CreateUserDto>) -> ControllerResult<TokenResponse> {
     handle_result(auth_service.register(register_data.into_inner()))
 }
 

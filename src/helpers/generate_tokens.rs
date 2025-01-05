@@ -3,11 +3,11 @@ use std::time::SystemTime;
 use dotenvy::dotenv;
 use jsonwebtoken::{encode, EncodingKey, Header};
 use crate::traits::claims::AccessClaim;
-use crate::models::users::User;
+use crate::models::users::UserModel;
 use crate::traits::claims::RefreshClaim;
 use crate::traits::token_response::TokenResponse;
 
-pub fn generate_tokens(user: &User) -> Result<TokenResponse, jsonwebtoken::errors::Error> {
+pub fn generate_tokens(user: &UserModel) -> Result<TokenResponse, jsonwebtoken::errors::Error> {
     dotenv().ok();
 
     let token_secret = env::var("SECRET_KEY").expect("SECRET_KEY must be set");
