@@ -16,8 +16,6 @@ pub fn generate_tokens(user: &User) -> Result<TokenResponse, jsonwebtoken::error
     let access_claim = AccessClaim {
         id: user.id.clone(),
         name: user.name.clone(),
-        age: user.age.clone(),
-        is_married: user.is_married.clone(),
         role_id: user.role_id.clone(),
         exp: access_expiration as usize,
     };

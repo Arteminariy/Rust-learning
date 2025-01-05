@@ -2,12 +2,13 @@ use rocket::{async_trait, request, Request};
 use rocket::http::Status;
 use rocket::outcome::Outcome;
 use rocket::request::FromRequest;
+use uuid::Uuid;
 use crate::error::{CustomError, ErrorResponse};
 use crate::helpers::decode_token::decode_token;
 use crate::traits::claims::AccessClaim;
 
 pub struct AdminAuth {
-    pub user_id: i32,
+    pub user_id: Uuid,
 }
 #[async_trait]
 impl<'r> FromRequest<'r> for AdminAuth {
@@ -25,16 +26,10 @@ impl<'r> FromRequest<'r> for AdminAuth {
         match decode_token::<AccessClaim>(token) {
             Ok(data) => {
                 match data.claims.role_id {
-                    Some(role_id) => {
-                        match role_id {
-                            1 => Outcome::Success(AdminAuth {
-                                user_id: data.claims.id,
-                            }),
-                            _ => {
-                                request.local_cache(|| ErrorResponse::from(CustomError::Forbidden("Not an admin".to_string())));
-                                Outcome::Error((Status::Forbidden, ()))
-                            }
-                        }
+                    Some(_) => {
+                        Outcome::Success(AdminAuth {
+                            user_id: data.claims.id,
+                        })
                     }
                     None => {
                         request.local_cache(|| ErrorResponse::from(CustomError::Forbidden("No role".to_string())));

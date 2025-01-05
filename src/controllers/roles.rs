@@ -1,5 +1,7 @@
 use rocket::{delete, get, post, put, routes, Route, State};
 use rocket::serde::json::Json;
+use uuid::{Uuid};
+use crate::error::ErrorResponse;
 use crate::middlewares::guards::admin_auth::AdminAuth;
 use crate::middlewares::guards::token_auth::TokenAuth;
 use crate::models::roles::{NewRole, Role, UpdateRole};
@@ -14,8 +16,10 @@ pub fn create_role(roles_service: &State<RolesService>, role_dto: Json<NewRole>,
 
 #[get("/roles/<role_id>")]
 pub fn get_role(roles_service: &State<RolesService>, role_id: String, _token: TokenAuth) -> ControllerResult<Role> {
-    let role_id = role_id.parse::<i32>().unwrap();
-    handle_result(roles_service.get_role(role_id))
+    match Uuid::parse_str(&role_id) {
+        Ok(role_id) => handle_result(roles_service.get_role(role_id)),
+        Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
+    }
 }
 
 #[get("/roles?<size>&<page>")]
@@ -29,14 +33,18 @@ pub fn get_list(roles_service: &State<RolesService>, size: Option<i64>, page: Op
 
 #[put("/roles/<role_id>", format = "json", data = "<role_dto>")]
 pub fn update_role(roles_service: &State<RolesService>, role_id: String, role_dto: Json<UpdateRole>, _token: AdminAuth) -> ControllerResult<Role> {
-    let role_id = role_id.parse::<i32>().unwrap();
-    handle_result(roles_service.update_role(role_id, role_dto.into_inner()))
+    match Uuid::parse_str(&role_id) {
+        Ok(role_id) => handle_result(roles_service.update_role(role_id, role_dto.into_inner())),
+        Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
+    }
 }
 
 #[delete("/roles/<role_id>")]
 pub fn delete_role(roles_service: &State<RolesService>, role_id: String, _token: AdminAuth) -> NoContentResult {
-    let role_id = role_id.parse::<i32>().unwrap();
-    handle_delete_result(roles_service.delete_role(role_id))
+    match Uuid::parse_str(&role_id) {
+        Ok(role_id) =>  handle_delete_result(roles_service.delete_role(role_id)),
+        Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
+    }
 }
 
 pub fn roles_routes() -> Vec<Route> {

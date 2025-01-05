@@ -1,10 +1,11 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Serialize, Deserialize};
+use uuid::Uuid;
 use crate::schema::roles;
 
 #[derive(Debug, Queryable, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Role {
-    pub id: i32,
+    pub id: Uuid,
     pub name: String,
 }
 

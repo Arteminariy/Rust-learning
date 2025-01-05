@@ -1,3 +1,4 @@
+use uuid::Uuid;
 use crate::traits::login_data::LoginData;
 use crate::traits::token_response::TokenResponse;
 use crate::error::CustomError;
@@ -58,7 +59,7 @@ impl AuthService {
         }
     }
 
-    pub fn change_password(&self, user_id: i32, data: ChangePasswordDto) -> ServiceResult<()> {
+    pub fn change_password(&self, user_id: Uuid, data: ChangePasswordDto) -> ServiceResult<()> {
         let user = self.user_service.get_user(user_id)?;
         match verify_password(&user.password_hash, &data.old_password) {
             Ok(_) => {

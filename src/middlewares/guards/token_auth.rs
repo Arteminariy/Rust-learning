@@ -2,12 +2,13 @@ use rocket::async_trait;
 use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request};
 use rocket::outcome::Outcome;
+use uuid::Uuid;
 use crate::error::{CustomError, ErrorResponse};
 use crate::helpers::decode_token::decode_token;
 use crate::traits::claims::AccessClaim;
 
 pub struct TokenAuth {
-    pub user_id: i32,
+    pub user_id: Uuid,
 }
 #[async_trait]
 impl<'r> FromRequest<'r> for TokenAuth {

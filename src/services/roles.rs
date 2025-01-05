@@ -1,3 +1,4 @@
+use uuid::Uuid;
 use crate::error::CustomError;
 use crate::models::roles::{NewRole, Role, UpdateRole};
 use crate::pagination::{List, ResponsePagination};
@@ -13,7 +14,7 @@ impl RolesService {
         self.repo.create_role(role_dto).map_err(CustomError::from)
     }
 
-    pub fn get_role(&self, role_id: i32) -> ServiceResult<Role> {
+    pub fn get_role(&self, role_id: Uuid) -> ServiceResult<Role> {
         self.repo.get_role(role_id).map_err(CustomError::from)
     }
 
@@ -21,11 +22,11 @@ impl RolesService {
         self.repo.get_list(pagination).map_err(CustomError::from)
     }
 
-    pub fn update_role(&self, role_id: i32, role_dto: UpdateRole) -> ServiceResult<Role> {
+    pub fn update_role(&self, role_id: Uuid, role_dto: UpdateRole) -> ServiceResult<Role> {
         self.repo.update_role(role_id, role_dto).map_err(CustomError::from)
     }
 
-    pub fn delete_role(&self, role_id: i32) -> ServiceResult<()> {
+    pub fn delete_role(&self, role_id: Uuid) -> ServiceResult<()> {
         self.repo.delete_role(role_id).map_err(CustomError::from)
     }
 }

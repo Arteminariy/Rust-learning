@@ -1,15 +1,14 @@
 use diesel::{Queryable, Insertable, AsChangeset};
 use serde::{Serialize, Deserialize};
+use uuid::Uuid;
 use crate::schema::users;
 
 #[derive(Debug, Queryable, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
-    pub id: i32,
+    pub id: Uuid,
     pub name: String,
-    pub age: i32,
-    pub is_married: bool,
-    pub role_id: Option<i32>,
+    pub role_id: Option<Uuid>,
     pub password_hash: String,
 }
 
@@ -18,9 +17,7 @@ pub struct User {
 #[serde(rename_all = "camelCase")]
 pub struct NewUser {
     pub name: String,
-    pub age: i32,
-    pub is_married: bool,
-    pub role_id: Option<i32>,
+    pub role_id: Option<Uuid>,
     pub password_hash: String,
 }
 
@@ -30,7 +27,5 @@ pub struct NewUser {
 #[changeset_options(treat_none_as_null = "true")]
 pub struct UpdateUser {
     pub name: String,
-    pub age: i32,
-    pub is_married: bool,
-    pub role_id: Option<i32>,
+    pub role_id: Option<Uuid>,
 }

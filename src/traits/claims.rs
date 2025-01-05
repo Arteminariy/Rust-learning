@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RefreshClaim {
@@ -8,10 +9,8 @@ pub struct RefreshClaim {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccessClaim {
-    pub id: i32,
+    pub id: Uuid,
     pub name: String,
-    pub age: i32,
-    pub is_married: bool,
-    pub role_id: Option<i32>,
+    pub role_id: Option<Uuid>,
     pub exp: usize,
 }

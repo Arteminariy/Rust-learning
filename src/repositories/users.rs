@@ -1,6 +1,7 @@
 use diesel::prelude::*;
 use crate::schema::users;
 use diesel::r2d2::{ConnectionManager, Pool};
+use uuid::Uuid;
 use crate::models::users::{NewUser, UpdateUser, User};
 use crate::pagination::{List, RequestPagination, ResponsePagination};
 
@@ -16,7 +17,7 @@ impl UserRepository {
             .get_result::<User>(&conn)
     }
 
-    pub fn get_user(&self, user_id: i32) -> Result<User, diesel::result::Error> {
+    pub fn get_user(&self, user_id: Uuid) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         users::table.find(user_id).get_result::<User>(&conn)
     }
@@ -49,12 +50,12 @@ impl UserRepository {
         })
     }
 
-    pub fn update_user(&self, user_id: i32, user_dto: UpdateUser) -> Result<User, diesel::result::Error> {
+    pub fn update_user(&self, user_id: Uuid, user_dto: UpdateUser) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::update(users::table.filter(users::id.eq(user_id))).set(&user_dto).get_result::<User>(&conn)
     }
 
-    pub fn delete_user(&self, user_id: i32) -> Result<(), diesel::result::Error> {
+    pub fn delete_user(&self, user_id: Uuid) -> Result<(), diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         let rows_deleted = diesel::delete(users::table.filter(users::id.eq(user_id))).execute(&conn)?;
         if rows_deleted == 0 {
@@ -64,7 +65,7 @@ impl UserRepository {
         }
     }
 
-    pub fn change_password(&self, user_id: i32, new_password_hash: String) -> Result<User, diesel::result::Error> {
+    pub fn change_password(&self, user_id: Uuid, new_password_hash: String) -> Result<User, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::update(users::table.filter(users::id.eq(user_id))).set(users::password_hash.eq(new_password_hash)).get_result::<User>(&conn)
     }

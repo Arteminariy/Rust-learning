@@ -1,6 +1,7 @@
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
 use r2d2::Pool;
+use uuid::Uuid;
 use crate::models::roles::{NewRole, Role, UpdateRole};
 use crate::pagination::{List, RequestPagination, ResponsePagination};
 use crate::schema::{roles};
@@ -17,7 +18,7 @@ impl RolesRepository {
             .get_result::<Role>(&conn)
     }
 
-    pub fn get_role(&self, role_id: i32) -> Result<Role, diesel::result::Error> {
+    pub fn get_role(&self, role_id: Uuid) -> Result<Role, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         roles::table.find(role_id).get_result::<Role>(&conn)
     }
@@ -45,12 +46,12 @@ impl RolesRepository {
         })
     }
 
-    pub fn update_role(&self, role_id: i32, role_dto: UpdateRole) -> Result<Role, diesel::result::Error> {
+    pub fn update_role(&self, role_id: Uuid, role_dto: UpdateRole) -> Result<Role, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::update(roles::table.filter(roles::id.eq(role_id))).set(&role_dto).get_result::<Role>(&conn)
     }
 
-    pub fn delete_role(&self, role_id: i32) -> Result<(), diesel::result::Error> {
+    pub fn delete_role(&self, role_id: Uuid) -> Result<(), diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         let rows_deleted = diesel::delete(roles::table.filter(roles::id.eq(role_id))).execute(&conn)?;
         if rows_deleted == 0 {
