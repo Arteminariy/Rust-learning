@@ -25,6 +25,7 @@ use crate::controllers::auth::auth_routes;
 use crate::controllers::roles::roles_routes;
 use crate::controllers::users::user_routes;
 use crate::helpers::establish_connection_pool::establish_connection_pool;
+use crate::middlewares::catchers::unprocessable_entity_catcher::unprocessable_entity_catcher;
 use crate::repositories::roles::RolesRepository;
 use crate::repositories::users::UserRepository;
 use crate::services::auth::AuthService;
@@ -60,5 +61,5 @@ fn rocket() -> Rocket<Build> {
         .manage(auth_service)
         .manage(roles_service)
         .mount("/", [user_routes(), auth_routes(), roles_routes()].concat())
-        .register("/", catchers![unauthorized_catcher])
+        .register("/", catchers![unauthorized_catcher, unprocessable_entity_catcher])
 }

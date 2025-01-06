@@ -11,8 +11,12 @@ pub fn generate_tokens(user: &UserModel) -> Result<TokenResponse, jsonwebtoken::
     dotenv().ok();
 
     let token_secret = env::var("SECRET_KEY").expect("SECRET_KEY must be set");
-    let access_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 300;
-    let refresh_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 3600;
+
+    let access_lifetime = env::var("ACCESS_LIFETIME_SECONDS").unwrap_or(300.to_string());
+    let refresh_lifetime = env::var("REFRESH_LIFETIME_SECONDS").unwrap_or(3600.to_string());
+
+    let access_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + access_lifetime.parse::<u64>().unwrap();
+    let refresh_expiration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + refresh_lifetime.parse::<u64>().unwrap();
     let access_claim = AccessClaim {
         id: user.id.clone(),
         name: user.name.clone(),
