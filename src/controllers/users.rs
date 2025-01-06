@@ -13,7 +13,7 @@ use crate::pagination::{List, ResponsePagination};
 pub fn get_user(user_service: &State<UserService>, user_id: String, _token: TokenAuth) -> ControllerResult<UserDto> {
     match Uuid::parse_str(&user_id) {
         Ok(user_id) => handle_result(user_service.get_one(user_id)),
-        Err(e) => Err(ErrorResponse { code: 400, message: e.to_string() })
+        Err(e) => Err(ErrorResponse { code: 400, message: format!("Uuid error: {}", e.to_string()) })
     }
 }
 
