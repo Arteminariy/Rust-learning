@@ -2,7 +2,7 @@ use diesel::prelude::*;
 use crate::schema::users;
 use diesel::r2d2::{ConnectionManager, Pool};
 use uuid::Uuid;
-use crate::models::users::{CreateUserDto, UpdateUserDto, UserModel};
+use crate::models::users::{CreateUserEntity, UpdateUserDto, UserModel};
 use crate::pagination::{List, RequestPagination, ResponsePagination};
 
 pub struct UserRepository {
@@ -10,7 +10,7 @@ pub struct UserRepository {
 }
 
 impl UserRepository {
-    pub fn create(&self, user_dto: CreateUserDto) -> Result<UserModel, diesel::result::Error> {
+    pub fn create(&self, user_dto: CreateUserEntity) -> Result<UserModel, diesel::result::Error> {
         let conn = self.pool.get().unwrap();
         diesel::insert_into(users::table)
             .values(&user_dto)

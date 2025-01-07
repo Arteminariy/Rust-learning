@@ -4,7 +4,7 @@ use r2d2::Pool;
 use uuid::Uuid;
 use crate::helpers::hash_password::hash_password;
 use crate::models::roles::NewRole;
-use crate::models::users::CreateUserDto;
+use crate::models::users::{CreateUserEntity};
 use crate::schema::{roles, users};
 
 pub fn init_database(pool: Pool<ConnectionManager<PgConnection>>) {
@@ -33,7 +33,7 @@ pub fn init_database(pool: Pool<ConnectionManager<PgConnection>>) {
             .expect("Admin role not found");
 
         let hashed_password = hash_password("admin123").expect("Failed to hash password");
-        let new_user = CreateUserDto {
+        let new_user = CreateUserEntity {
             name: "admin".to_string(),
             role_id: Some(admin_role_id),
             password_hash: hashed_password,

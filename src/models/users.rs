@@ -1,6 +1,6 @@
 use diesel::{Queryable, Insertable, AsChangeset};
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
+use rocket::serde::{Serialize, Deserialize};
+use uuid::{Uuid};
 use crate::schema::users;
 
 #[derive(Debug, Queryable)]
@@ -11,10 +11,17 @@ pub struct UserModel {
     pub password_hash: String,
 }
 
-#[derive(Debug, Insertable, Serialize, Deserialize)]
-#[table_name = "users"]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
+    pub name: String,
+    pub role_id: Option<Uuid>,
+    pub password: String,
+}
+
+#[derive(Debug, Insertable)]
+#[table_name = "users"]
+pub struct CreateUserEntity {
     pub name: String,
     pub role_id: Option<Uuid>,
     pub password_hash: String,

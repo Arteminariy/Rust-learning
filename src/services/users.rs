@@ -1,6 +1,6 @@
 use uuid::Uuid;
 use crate::error::CustomError;
-use crate::models::users::{CreateUserDto, UpdateUserDto, UserDto};
+use crate::models::users::{UpdateUserDto, UserDto};
 use crate::pagination::{List, ResponsePagination};
 use crate::repositories::users::UserRepository;
 use crate::wrappers::handle_result::ServiceResult;
@@ -10,10 +10,6 @@ pub struct UserService {
 }
 
 impl UserService {
-    pub fn create(&self, user_dto: CreateUserDto) -> ServiceResult<UserDto> {
-        self.repo.create(user_dto).map(UserDto::from).map_err(CustomError::from)
-    }
-
     pub fn get_one(&self, user_id: Uuid) -> ServiceResult<UserDto> {
         self.repo.get_one(user_id).map(UserDto::from).map_err(CustomError::from)
     }

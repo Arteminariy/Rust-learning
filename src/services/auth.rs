@@ -6,7 +6,7 @@ use crate::helpers::decode_token::decode_token;
 use crate::helpers::generate_tokens::generate_tokens;
 use crate::helpers::hash_password::hash_password;
 use crate::helpers::verify_password::verify_password;
-use crate::models::users::{CreateUserDto};
+use crate::models::users::{CreateUserDto, CreateUserEntity};
 use crate::repositories::users::UserRepository;
 use crate::traits::change_password_dto::ChangePasswordDto;
 use crate::traits::claims::RefreshClaim;
@@ -19,10 +19,11 @@ pub struct AuthService {
 
 impl AuthService {
     pub fn register(&self, new_user: CreateUserDto) -> ServiceResult<TokenResponse> {
-        let pass_hash: String = hash_password(&new_user.password_hash).expect("hashing password error occurred");
-        let new_user = CreateUserDto {
+        let pass_hash: String = hash_password(&new_user.password).expect("hashing password error occurred");
+        let new_user = CreateUserEntity {
             password_hash: pass_hash,
-            ..new_user
+            name: new_user.name,
+            role_id: new_user.role_id,
         };
         let user = self.user_repository.create(new_user).expect("Failed to create user in register");
         match generate_tokens(&user) {
